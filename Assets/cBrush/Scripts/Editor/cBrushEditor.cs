@@ -9,76 +9,54 @@ using UnityEngine.SceneManagement;
 
 namespace cBrush
 {
-
-
     [System.Serializable]
-    public class cBrushEditor : EditorWindow
+    public class CBrushEditor : EditorWindow
     {
-        public static Vector2 m_HScrollBarPos;
-        public static Vector2 m_VScrollBarPos;
-        public static Vector2 m_CurrentGuiPosition;
-        public static Vector2 m_LastGuiPosition;
+        public static Vector2 GuiPositionDifferential;
+        public static Vector2 CurrentGuiPosition;
+        public static Vector2 LastGuiPosition;
 
-        public static Vector2
-            m_GuiPositionDifferential; // simple check: if x or y increasing, 1, if decreasing 0 (else 0)
-
-        public static bool m_Init;
-        public static bool m_RecordSession;
-        public static BigBrushSettings m_cBrushSettings;
-        public static Color m_GizmoBrushColour;
-        public static Color m_GizmoBrushFocalColour;
-        float sizeMultiplier = 1.0f;
-        public static float m_Radius;
-        public static int m_Intensity = 25;
-        public static float m_FocalShift = 0;
-        public static float m_FocalShiftMinLimit = 0.0f;
-        public static float m_FocalShiftMaxLimit = 1.0f;
-        public static float m_FocalShiftMinSize = 0.0f;
-        public static float m_FocalShiftMaxSize = 1.0f;
+        public static bool Init;
+        public static bool RecordSession;
+        public static Color GizmoBrushColour;
+        public static Color GizmoBrushFocalColour;
+        float m_SizeMultiplier = 1.0f;
+        public static float Radius;
+        public static int Intensity = 25;
+        public static float FocalShift = 0;
 
 
-        public static int m_PaintIntensity;
-        public static float m_BrushSize = 1f;
-        public static float m_MinLimit = 0f;
-        public static float m_MaxLimit = 1f;
+        public static int PaintIntensity;
+        public const float MinLimit = 0f;
+        public const float MaxLimit = 1f;
 
-        public static float m_MinSize = 0.5f;
-        public static float m_MaxSize = 1f;
-        public static Vector3 m_PainterPosition;
-        public static Vector3 m_NormalDirection;
-        public static RaycastHit m_RayCastHitInfo;
-        public static string myString;
-        public static string myStatus;
-        public DataHolder dataHolder = null;
-        public static GameObject m_GameObject = null;
-        public static bool m_PaintMode;
-        public static bool m_GatherMode;
-        public static GameObject m_DragObject;
-        public static bool m_DragObjectRelease;
-        public static Vector3 m_LastPosition;
-        public static Vector3 m_LastScale;
-        public static Quaternion m_LastRotation;
+        public static float MinSize = 0.5f;
+        public static float MaxSize = 1f;
+        public static Vector3 PainterPosition;
+        public static Vector3 NormalDirection;
+        public static RaycastHit RayCastHitInfo;
+        public static string MyStatus;
+        public DataHolder dataHolder;
+        public static GameObject GameObject;
+        public static bool PaintMode;
+        public static GameObject DragObject;
 
-        public static bool m_UseNormalDirection = true;
-        public static bool m_Randomize = false;
-        public static bool m_RandomizePosition;
-        public static bool m_RandomizeRotation;
-        public static bool m_RandomizeScale;
-        public static float m_MaxRotationX;
-        public static float m_MaxRotationY;
-        public static float m_MaxRotationZ;
-        public static AnimationCurve m_CumulativeProbability;
-        public static float m_DepthOffset;
+        public static bool UseNormalDirection = true;
+        public static bool RandomizePosition;
+        public static bool RandomizeRotation;
+        public static bool RandomizeScale;
+        public static float MaxRotationX;
+        public static float MaxRotationY;
+        public static float MaxRotationZ;
+        public static AnimationCurve CumulativeProbability;
 
-        private GUIStyle m_boxStyle;
+        private GUIStyle m_BoxStyle;
         private GUIStyle m_HeaderStyle;
         private GUIStyle m_ContentStyle;
-        private GUIStyle m_wrapStyle;
+        private GUIStyle m_WrapStyle;
         private GUIStyle m_HorizontalStyle;
         private GUIStyle m_StatusBarStyle;
-        public static BigBrushSessionRecorder m_BigBrushSessionRecorder;
-        public static int m_BrushModeNum = 0;
-        public static string[] m_BrushMode = new string[] {"Paint", "Gather", "Select",};
+        public static int BrushModeNum;
 
         public enum StrokeOptions
         {
@@ -91,31 +69,26 @@ namespace cBrush
 
         public static StrokeOptions m_StrokeOptions;
 
-        public enum PaintSurface
+        public enum PaintSurfaceType
         {
             All,
             Selected
         };
 
-        public static PaintSurface m_PaintSurface;
+        public static PaintSurfaceType m_PaintSurface;
 
         // Controls section
-        public static bool m_HotKeyPosition;
-        public static bool m_HotKeyRotation;
-        public static bool m_HotKeyScale;
-        public static bool m_HotKeyShift;
-        public static bool m_HotKeyControl;
+        public static bool HotKeyShift;
+        public static bool HotKeyControl;
 
         //Icons
-        public static GUISkin _editorSkin;
-        public static Texture2D buttonIconBrushMode;
-        public static Texture2D buttonIconNormal;
-        public static Texture2D buttonIconRandomize;
-        public static Texture2D buttonIconStroke;
-        public static Texture2D buttonIconRandomizePosition;
-        public static Texture2D buttonIconRandomizeRotation;
-        public static Texture2D buttonIconRandomizeScale;
-        public static Texture2D buttonIconGrid;
+        public static Texture2D ButtonIconBrushMode;
+        public static Texture2D ButtonIconNormal;
+        public static Texture2D ButtonIconStroke;
+        public static Texture2D ButtonIconRandomizePosition;
+        public static Texture2D ButtonIconRandomizeRotation;
+        public static Texture2D ButtonIconRandomizeScale;
+        public static Texture2D ButtonIconGrid;
 
         //stroke vars
         public static bool m_StrokeDragDot;
@@ -123,14 +96,14 @@ namespace cBrush
         [MenuItem("Tools/cBrush %g", false, 1)]
         public static void ShowManager()
         {
-            var manager = EditorWindow.GetWindow<cBrushEditor>(false, "cBrush");
+            var manager = GetWindow<CBrushEditor>(false, "cBrush");
             manager.Show();
         }
 
         [System.Serializable]
         public class DataHolder : MonoBehaviour
         {
-            [SerializeField] public bool defaultBool = false;
+            [SerializeField] public bool DefaultBool = false;
             [SerializeField] public GameObject m_GameObject;
         }
 
@@ -141,46 +114,46 @@ namespace cBrush
             SetupBoxStyle();
 
 
-            /// Row 
+            // Row 
             GUILayout.BeginHorizontal("", m_HorizontalStyle);
             //GUILayout.Height(175);
-            if (GUI.Button(new Rect(10, 10, 25, 25), buttonIconBrushMode, GUIStyle.none))
+            if (GUI.Button(new Rect(10, 10, 25, 25), ButtonIconBrushMode, GUIStyle.none))
             {
                 ToggleBrushMode();
                 UpdateBrushMode();
             }
 
-            if (GUI.Button(new Rect(40, 10, 25, 25), buttonIconNormal, GUIStyle.none))
+            if (GUI.Button(new Rect(40, 10, 25, 25), ButtonIconNormal, GUIStyle.none))
             {
-                m_UseNormalDirection = !m_UseNormalDirection;
+                UseNormalDirection = !UseNormalDirection;
                 UpdateBrushNormal();
             }
 
-            if (GUI.Button(new Rect(70, 10, 25, 25), buttonIconStroke, GUIStyle.none))
+            if (GUI.Button(new Rect(70, 10, 25, 25), ButtonIconStroke, GUIStyle.none))
             {
                 ToggleStrokeMode();
                 UpdateBrushStroke();
             }
 
-            if (GUI.Button(new Rect(100, 10, 25, 25), buttonIconRandomizePosition, GUIStyle.none))
+            if (GUI.Button(new Rect(100, 10, 25, 25), ButtonIconRandomizePosition, GUIStyle.none))
             {
-                m_RandomizePosition = !m_RandomizePosition;
+                RandomizePosition = !RandomizePosition;
                 UpdateBrushRandomizePosition();
             }
 
-            if (GUI.Button(new Rect(130, 10, 25, 25), buttonIconRandomizeRotation, GUIStyle.none))
+            if (GUI.Button(new Rect(130, 10, 25, 25), ButtonIconRandomizeRotation, GUIStyle.none))
             {
-                m_RandomizeRotation = !m_RandomizeRotation;
+                RandomizeRotation = !RandomizeRotation;
                 UpdateBrushRandomizeRotation();
             }
 
-            if (GUI.Button(new Rect(160, 10, 25, 25), buttonIconRandomizeScale, GUIStyle.none))
+            if (GUI.Button(new Rect(160, 10, 25, 25), ButtonIconRandomizeScale, GUIStyle.none))
             {
-                m_RandomizeScale = !m_RandomizeScale;
+                RandomizeScale = !RandomizeScale;
                 UpdateBrushRandomizeScale();
             }
 
-            if (GUI.Button(new Rect(190, 10, 25, 25), buttonIconGrid, GUIStyle.none))
+            if (GUI.Button(new Rect(190, 10, 25, 25), ButtonIconGrid, GUIStyle.none))
             {
                 cGridUtility.ShowGrid = !cGridUtility.ShowGrid;
                 UpdateGrid();
@@ -203,17 +176,17 @@ namespace cBrush
             }
 
             GUILayout.Label("MultiObject:", GUILayout.MaxWidth(50));
-            m_GameObject = (GameObject) EditorGUILayout.ObjectField("", m_GameObject, typeof(GameObject), true,
+            GameObject = (GameObject) EditorGUILayout.ObjectField("", GameObject, typeof(GameObject), true,
                 GUILayout.MaxWidth(90));
-            if (GUILayout.Button("Add"))
+            if (GUILayout.Button("Add(N)"))//not yet working
             {
-                cBrushThumbnailer.CreateThumbnail(m_GameObject);
+                cBrushThumbnailer.CreateThumbnail(GameObject);
                 //cThumbnailer.CreateThumbnail()
                 //AssetDatabase.Refresh();
                 //SaveSettings();
             }
 
-            if (GUILayout.Button("Edit"))
+            if (GUILayout.Button("LoadSettings(N)")) //not yet working
             {
                 LoadSettings();
             }
@@ -222,44 +195,44 @@ namespace cBrush
 
             /// Row
             GUILayout.BeginHorizontal("", GUIStyle.none);
-            m_GameObject = (GameObject) EditorGUILayout.ObjectField("", m_GameObject, typeof(GameObject), true,
+            GameObject = (GameObject) EditorGUILayout.ObjectField("", GameObject, typeof(GameObject), true,
                 GUILayout.MaxWidth(90));
             GUILayout.Label("Radius:", GUILayout.MaxWidth(50));
-            m_Radius = EditorGUILayout.Slider("", m_Radius, 1f, 50f, GUILayout.MaxWidth(120));
+            Radius = EditorGUILayout.Slider("", Radius, 1f, 50f, GUILayout.MaxWidth(120));
             GUILayout.Label("Intensity:", GUILayout.MaxWidth(55));
-            m_PaintIntensity = EditorGUILayout.IntSlider("", m_PaintIntensity, 1, 100, GUILayout.MaxWidth(120));
+            PaintIntensity = EditorGUILayout.IntSlider("", PaintIntensity, 1, 100, GUILayout.MaxWidth(120));
             GUILayout.Label("Focal Shift:", GUILayout.MaxWidth(70));
-            m_FocalShift = EditorGUILayout.Slider("", m_FocalShift, -1, 1, GUILayout.MaxWidth(120));
-            m_CumulativeProbability = EditorGUILayout.CurveField("", m_CumulativeProbability, GUILayout.MaxWidth(40));
+            FocalShift = EditorGUILayout.Slider("", FocalShift, -1, 1, GUILayout.MaxWidth(120));
+            CumulativeProbability = EditorGUILayout.CurveField("", CumulativeProbability, GUILayout.MaxWidth(40));
 
             GUILayout.Label("Paint surface:", GUILayout.MaxWidth(80));
-            m_PaintSurface = (PaintSurface) EditorGUILayout.EnumPopup("", m_PaintSurface, GUILayout.MaxWidth(55));
+            m_PaintSurface = (PaintSurfaceType) EditorGUILayout.EnumPopup("", m_PaintSurface, GUILayout.MaxWidth(55));
             GUILayout.Label("Record session", GUILayout.MaxWidth(90));
-            m_RecordSession = EditorGUILayout.Toggle("", m_RecordSession, GUILayout.MaxWidth(40));
+            RecordSession = EditorGUILayout.Toggle("", RecordSession, GUILayout.MaxWidth(40));
 
             GUILayout.EndHorizontal();
 
             /// Row 
             GUILayout.BeginHorizontal("", GUIStyle.none);
             GUILayout.Label("Size:", GUILayout.MaxWidth(40));
-            m_MinSize = EditorGUILayout.FloatField("", m_MinSize, GUILayout.MaxWidth(35));
-            EditorGUILayout.MinMaxSlider(ref m_MinSize, ref m_MaxSize, m_MinLimit, m_MaxLimit, GUILayout.MaxWidth(60));
-            m_MaxSize = EditorGUILayout.FloatField("", m_MaxSize, GUILayout.MaxWidth(35));
+            MinSize = EditorGUILayout.FloatField("", MinSize, GUILayout.MaxWidth(35));
+            EditorGUILayout.MinMaxSlider(ref MinSize, ref MaxSize, MinLimit, MaxLimit, GUILayout.MaxWidth(60));
+            MaxSize = EditorGUILayout.FloatField("", MaxSize, GUILayout.MaxWidth(35));
 
             GUILayout.Space(20);
             GUILayout.Space(20);
             GUILayout.Label("rX:", GUILayout.MaxWidth(20));
-            m_MaxRotationX = EditorGUILayout.FloatField("", m_MaxRotationX, GUILayout.MaxWidth(30));
+            MaxRotationX = EditorGUILayout.FloatField("", MaxRotationX, GUILayout.MaxWidth(30));
             GUILayout.Label("rY:", GUILayout.MaxWidth(20));
-            m_MaxRotationY = EditorGUILayout.FloatField("", m_MaxRotationY, GUILayout.MaxWidth(30));
+            MaxRotationY = EditorGUILayout.FloatField("", MaxRotationY, GUILayout.MaxWidth(30));
             GUILayout.Label("rZ:", GUILayout.MaxWidth(20));
-            m_MaxRotationZ = EditorGUILayout.FloatField("", m_MaxRotationZ, GUILayout.MaxWidth(30));
+            MaxRotationZ = EditorGUILayout.FloatField("", MaxRotationZ, GUILayout.MaxWidth(30));
             GUILayout.EndHorizontal();
 
 
             GUILayout.BeginHorizontal("", m_StatusBarStyle);
             GUILayout.Label("Status:");
-            GUILayout.Label(myStatus);
+            GUILayout.Label(MyStatus);
             GUILayout.EndHorizontal();
 
         }
@@ -269,27 +242,21 @@ namespace cBrush
         void OnEnable()
         {
             InitialiseBigBrushEngine();
-            if (dataHolder == null) dataHolder = new DataHolder();
+            SceneView.onSceneGUIDelegate += OnScene;
+            //if (dataHolder == null) dataHolder = new DataHolder();
         }
 
         void InitialiseBigBrushEngine()
         {
-            if (!m_Init)
+            if (!Init)
             {
-                m_Init = true;
-                m_GizmoBrushColour = Color.green;
-                m_GizmoBrushFocalColour = Color.blue;
-                m_CumulativeProbability = AnimationCurve.Linear(0, 0, 10, 10);
-
+                Init = true;
+                GizmoBrushColour = Color.green;
+                GizmoBrushFocalColour = Color.blue;
+                CumulativeProbability = AnimationCurve.Linear(0, 0, 10, 10);
                 bool init = false;
-                if (EditorApplication.timeSinceStartup < 1 && !init)
-                    ScriptableObjectUtility.CreateAssetPath<BigBrushSessionRecorder>(
-                        "Assets/Resources/BigBrushSession/");
-
-                BigBrushSettings m_BigBrushSettings =
-                    (BigBrushSettings) AssetDatabase.LoadAssetAtPath("Assets/BigBrush/DefaultBigBrushSettings.asset",
-                        typeof(BigBrushSettings));
-                myStatus = "Welcome!";
+    
+                MyStatus = "Welcome!";
 
                 UpdateBrushMode();
                 UpdateBrushNormal();
@@ -302,7 +269,7 @@ namespace cBrush
             }
         }
 
-        void OnSceneGUI()
+        private void OnSceneGUI()
         {
             EditorGUI.BeginChangeCheck();
             Debug.Log("OnSceneGUI");
@@ -316,20 +283,20 @@ namespace cBrush
             Handles.EndGUI();
 
             Handles.color = Color.red;
-            Handles.DrawSolidArc(m_PainterPosition, Vector3.up, -Vector3.right, 180, 3);
+            Handles.DrawSolidArc(PainterPosition, Vector3.up, -Vector3.right, 180, 3);
 
             EditorGUI.EndChangeCheck();
         }
 
         private void OnInspectorUpdate()
         {
-            /*
+                    //Debug.Log("OnInspectorUpdate");
                     UpdateBrushMode();
                     UpdateBrushNormal();
                     UpdateBrushRandomizePosition();
                     UpdateBrushRandomizeRotation();
                     UpdateBrushRandomizeScale();
-                    UpdateBrushStroke();*/
+                    UpdateBrushStroke();
         }
 
 
@@ -338,17 +305,17 @@ namespace cBrush
 
             if (cGridUtility.ShowGrid)
             {
-                buttonIconGrid =
+                ButtonIconGrid =
                     (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_grid_on.png",
                         typeof(Texture2D));
-                myStatus = "Grid on";
+                MyStatus = "Grid on";
             }
             else
             {
-                buttonIconGrid =
+                ButtonIconGrid =
                     (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_grid_off.png",
                         typeof(Texture2D));
-                myStatus = "Grid off";
+                MyStatus = "Grid off";
             }
 
             OnInspectorUpdate();
@@ -361,39 +328,39 @@ namespace cBrush
             {
                 case StrokeOptions.Freehand:
                 {
-                    buttonIconStroke = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconStroke = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_Stroke_Freehand.png", typeof(Texture2D));
-                    myStatus = "Stoke set to Freehand";
+                    MyStatus = "Stoke set to Freehand";
                     break;
                 }
                 case StrokeOptions.DragRect:
                 {
-                    buttonIconStroke = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconStroke = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_Stroke_Dragrect.png", typeof(Texture2D));
-                    myStatus = "Stoke set to DragRect";
+                    MyStatus = "Stoke set to DragRect";
                     break;
                 }
                 case StrokeOptions.DragDot:
                 {
-                    buttonIconStroke = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconStroke = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_Stroke_DragDot.png", typeof(Texture2D));
-                    myStatus = "Stoke set to DragDot";
+                    MyStatus = "Stoke set to DragDot";
                     break;
                 }
                 case StrokeOptions.Spray:
                 {
-                    buttonIconStroke =
+                    ButtonIconStroke =
                         (Texture2D) AssetDatabase.LoadAssetAtPath(
                             "Assets/cBrush/Resources/Icons/cbrush_ico_Stroke_Spray.png", typeof(Texture2D));
-                    myStatus = "Stoke set to Spray";
+                    MyStatus = "Stoke set to Spray";
                     break;
                 }
                 case StrokeOptions.Dots:
                 {
-                    buttonIconStroke =
+                    ButtonIconStroke =
                         (Texture2D) AssetDatabase.LoadAssetAtPath(
                             "Assets/cBrush/Resources/Icons/cbrush_ico_Stroke_Dots.png", typeof(Texture2D));
-                    myStatus = "Stoke set to Dots";
+                    MyStatus = "Stoke set to Dots";
                     break;
                 }
             }
@@ -401,22 +368,22 @@ namespace cBrush
 
         private void UpdateBrushNormal()
         {
-            switch (m_UseNormalDirection)
+            switch (UseNormalDirection)
             {
                 case true:
                 {
-                    buttonIconNormal =
+                    ButtonIconNormal =
                         (Texture2D) AssetDatabase.LoadAssetAtPath(
                             "Assets/cBrush/Resources/Icons/cbrush_ico_Normal_On.png", typeof(Texture2D));
-                    myStatus = "Use normal direction on";
+                    MyStatus = "Use normal direction on";
                     break;
                 }
                 case false:
                 {
-                    buttonIconNormal =
+                    ButtonIconNormal =
                         (Texture2D) AssetDatabase.LoadAssetAtPath(
                             "Assets/cBrush/Resources/Icons/cbrush_ico_Normal_Off.png", typeof(Texture2D));
-                    myStatus = "Use normal direction off";
+                    MyStatus = "Use normal direction off";
                     break;
                 }
             }
@@ -424,20 +391,20 @@ namespace cBrush
 
         private void UpdateBrushRandomizePosition()
         {
-            switch (m_RandomizePosition)
+            switch (RandomizePosition)
             {
                 case true:
                 {
-                    buttonIconRandomizePosition = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconRandomizePosition = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_randomize_pos_on.png", typeof(Texture2D));
-                    myStatus = "Randomize position on";
+                    MyStatus = "Randomize position on";
                     break;
                 }
                 case false:
                 {
-                    buttonIconRandomizePosition = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconRandomizePosition = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_randomize_pos_off.png", typeof(Texture2D));
-                    myStatus = "Randomize position off";
+                    MyStatus = "Randomize position off";
                     break;
                 }
             }
@@ -445,20 +412,20 @@ namespace cBrush
 
         private void UpdateBrushRandomizeRotation()
         {
-            switch (m_RandomizeRotation)
+            switch (RandomizeRotation)
             {
                 case true:
                 {
-                    buttonIconRandomizeRotation = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconRandomizeRotation = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_randomize_rotation_on.png", typeof(Texture2D));
-                    myStatus = "Randomize rotation on";
+                    MyStatus = "Randomize rotation on";
                     break;
                 }
                 case false:
                 {
-                    buttonIconRandomizeRotation = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconRandomizeRotation = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_randomize_rotation_off.png", typeof(Texture2D));
-                    myStatus = "Randomize rotation off";
+                    MyStatus = "Randomize rotation off";
                     break;
                 }
             }
@@ -466,20 +433,20 @@ namespace cBrush
 
         private void UpdateBrushRandomizeScale()
         {
-            switch (m_RandomizeScale)
+            switch (RandomizeScale)
             {
                 case true:
                 {
-                    buttonIconRandomizeScale = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconRandomizeScale = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_randomize_scale_on.png", typeof(Texture2D));
-                    myStatus = "Randomize scale on";
+                    MyStatus = "Randomize scale on";
                     break;
                 }
                 case false:
                 {
-                    buttonIconRandomizeScale = (Texture2D) AssetDatabase.LoadAssetAtPath(
+                    ButtonIconRandomizeScale = (Texture2D) AssetDatabase.LoadAssetAtPath(
                         "Assets/cBrush/Resources/Icons/cbrush_ico_randomize_scale_off.png", typeof(Texture2D));
-                    myStatus = "Randomize scale off";
+                    MyStatus = "Randomize scale off";
                     break;
                 }
             }
@@ -487,33 +454,35 @@ namespace cBrush
 
         private void UpdateBrushMode()
         {
-            switch (m_BrushModeNum)
+            
+            switch (BrushModeNum)
             {
                 case 2:
                 {
-                    buttonIconBrushMode =
+                    ButtonIconBrushMode =
                         (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_Select.png",
                             typeof(Texture2D));
-                    m_PaintMode = false;
-                    myStatus = "Select";
+                    PaintMode = false;
+                    MyStatus = "Select";
                     break;
                 }
                 case 1:
                 {
-                    buttonIconBrushMode =
+                    ButtonIconBrushMode =
                         (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_Nudge.png",
                             typeof(Texture2D));
-                    m_PaintMode = false;
-                    myStatus = "Nudge";
+                    PaintMode = false;
+                    MyStatus = "Nudge";
                     break;
                 }
                 default:
                 {
-                    buttonIconBrushMode =
+                    
+                    ButtonIconBrushMode =
                         (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_Paint.png",
                             typeof(Texture2D));
-                    m_PaintMode = true;
-                    myStatus = "Paint";
+                    PaintMode = true;
+                    MyStatus = "Paint";
                     break;
                 }
 
@@ -522,10 +491,10 @@ namespace cBrush
 
         void ToggleBrushMode()
         {
-            m_BrushModeNum += 1;
+            BrushModeNum += 1;
 
-            if (m_BrushModeNum > 2)
-                m_BrushModeNum = 0;
+            if (BrushModeNum > 2)
+                BrushModeNum = 0;
             //OnInspectorUpdate();
         }
 
@@ -544,7 +513,7 @@ namespace cBrush
             Handles.BeginGUI();
 
             Handles.EndGUI();
-
+            Debug.Log("OnScene");
 
             //Draws the brush circle
             DrawBigBrushGizmo();
@@ -552,7 +521,7 @@ namespace cBrush
             if (Event.current.alt == true)
             {
 
-                myStatus = "Alt";
+                MyStatus = "Alt";
                 return;
 
             }
@@ -562,20 +531,20 @@ namespace cBrush
 
             if (Event.current.shift)
             {
-                m_HotKeyShift = true;
+                HotKeyShift = true;
             }
             else
             {
-                m_HotKeyShift = false;
+                HotKeyShift = false;
             }
 
             if (Event.current.control)
             {
-                m_HotKeyControl = true;
+                HotKeyControl = true;
             }
             else
             {
-                m_HotKeyControl = false;
+                HotKeyControl = false;
             }
 
 
@@ -606,43 +575,43 @@ namespace cBrush
             RaycastHit hit;
             if (Event.current.type != EventType.MouseUp)
             {
-                m_CurrentGuiPosition = Event.current.mousePosition;
-                if (m_LastGuiPosition != m_CurrentGuiPosition)
+                CurrentGuiPosition = Event.current.mousePosition;
+                if (LastGuiPosition != CurrentGuiPosition)
                 {
-                    if (m_CurrentGuiPosition.x > m_LastGuiPosition.x)
+                    if (CurrentGuiPosition.x > LastGuiPosition.x)
                     {
-                        m_GuiPositionDifferential.x = 1;
+                        GuiPositionDifferential.x = 1;
                     }
 
-                    if (m_CurrentGuiPosition.x < m_LastGuiPosition.x)
+                    if (CurrentGuiPosition.x < LastGuiPosition.x)
                     {
-                        m_GuiPositionDifferential.x = -1;
+                        GuiPositionDifferential.x = -1;
                     }
 
-                    if (m_CurrentGuiPosition.y > m_LastGuiPosition.y)
+                    if (CurrentGuiPosition.y > LastGuiPosition.y)
                     {
-                        m_GuiPositionDifferential.y = 1;
+                        GuiPositionDifferential.y = 1;
                     }
 
-                    if (m_CurrentGuiPosition.y < m_LastGuiPosition.y)
+                    if (CurrentGuiPosition.y < LastGuiPosition.y)
                     {
-                        m_GuiPositionDifferential.y = -1;
+                        GuiPositionDifferential.y = -1;
                     }
 
                 }
 
-                m_LastGuiPosition = m_CurrentGuiPosition;
+                LastGuiPosition = CurrentGuiPosition;
 
-                Ray ray = HandleUtility.GUIPointToWorldRay(m_CurrentGuiPosition);
+                Ray ray = HandleUtility.GUIPointToWorldRay(CurrentGuiPosition);
                 if (Physics.Raycast(ray, out hit))
                 {
-                    m_RayCastHitInfo = hit;
-                    m_PainterPosition = hit.point;
+                    RayCastHitInfo = hit;
+                    PainterPosition = hit.point;
 
-                    if (m_UseNormalDirection)
-                        m_NormalDirection = hit.normal;
+                    if (UseNormalDirection)
+                        NormalDirection = hit.normal;
                     else
-                        m_NormalDirection = Vector3.up;
+                        NormalDirection = Vector3.up;
 
                     UpdatePaintDrag();
 
@@ -657,7 +626,7 @@ namespace cBrush
                 StrokeFreehand();
             }
 
-            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && m_PaintMode)
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0 && PaintMode)
             {
                 if (m_StrokeOptions == StrokeOptions.Dots)
                 {
@@ -695,7 +664,7 @@ namespace cBrush
             */
             //Debug.Log("This event opens up so many possibilities.");
 
-            if (m_PaintMode)
+            if (PaintMode)
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
 
@@ -705,31 +674,31 @@ namespace cBrush
 
         private static void UpdatePaintDrag()
         {
-            if (m_DragObject != null)
+            if (DragObject != null)
             {
-                m_DragObject.transform.position = m_PainterPosition;
-                m_DragObject.transform.rotation =
-                    Quaternion.FromToRotation(m_DragObject.transform.up, m_NormalDirection) *
-                    m_DragObject.transform.rotation;
+                DragObject.transform.position = PainterPosition;
+                DragObject.transform.rotation =
+                    Quaternion.FromToRotation(DragObject.transform.up, NormalDirection) *
+                    DragObject.transform.rotation;
 
-                if (m_HotKeyShift && Tools.current.ToString() == "Scale")
+                if (HotKeyShift && Tools.current.ToString() == "Scale")
                 {
-                    m_DragObject.transform.localScale += new Vector3(0.01f, 0.01f, 0.01f);
+                    DragObject.transform.localScale += new Vector3(0.01f, 0.01f, 0.01f);
                 }
 
-                if (m_HotKeyControl && Tools.current.ToString() == "Scale")
+                if (HotKeyControl && Tools.current.ToString() == "Scale")
                 {
-                    m_DragObject.transform.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
+                    DragObject.transform.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
                 }
 
-                if (m_HotKeyShift && Tools.current.ToString() == "Rotate")
+                if (HotKeyShift && Tools.current.ToString() == "Rotate")
                 {
-                    m_DragObject.transform.Rotate(Vector3.up * (Time.deltaTime + 1), Space.World);
+                    DragObject.transform.Rotate(Vector3.up * (Time.deltaTime + 1), Space.World);
                 }
 
-                if (m_HotKeyControl && Tools.current.ToString() == "Rotate")
+                if (HotKeyControl && Tools.current.ToString() == "Rotate")
                 {
-                    m_DragObject.transform.Rotate(Vector3.up * -(Time.deltaTime + 1), Space.World);
+                    DragObject.transform.Rotate(Vector3.up * -(Time.deltaTime + 1), Space.World);
                 }
             }
         }
@@ -738,28 +707,28 @@ namespace cBrush
         private static void StrokeFreehand()
         {
             //clear out any drag paint object
-            if (m_DragObject != null)
+            if (DragObject != null)
             {
-                m_DragObject.layer = 0;
-                m_DragObject = null;
-                DestroyImmediate(m_DragObject);
+                DragObject.layer = 0;
+                DragObject = null;
+                DestroyImmediate(DragObject);
             }
 
-            if (m_GameObject != null)
+            if (GameObject != null)
             {
-                for (int i = 0; i < m_PaintIntensity; i++)
+                for (int i = 0; i < PaintIntensity; i++)
                 {
-                    var go = Instantiate(m_GameObject, m_PainterPosition, Quaternion.identity);
+                    var go = Instantiate(GameObject, PainterPosition, Quaternion.identity);
                     var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
                     tag.hideFlags = HideFlags.HideAndDontSave;
                     //void record session
                     //m_BigBrushSessionRecorder.SessionObjects.Add(go);
 
-                    if (m_UseNormalDirection)
-                        go.transform.rotation = Quaternion.FromToRotation(go.transform.up, m_NormalDirection) *
+                    if (UseNormalDirection)
+                        go.transform.rotation = Quaternion.FromToRotation(go.transform.up, NormalDirection) *
                                                 go.transform.rotation;
 
-                    var randomradius = RandomCurve(m_Radius);
+                    var randomradius = RandomCurve(Radius);
                     //var x = RandomCurve(go.transform.position.x);
                     var y = go.transform.position.y;
                     //var z = RandomCurve(go.transform.position.z);
@@ -768,9 +737,9 @@ namespace cBrush
 
                     go.transform.position = pos;
 
-                    AwesomeExtensions.SetObjectRotation(go.transform, m_RandomizeRotation, m_MaxRotationX,
-                        m_MaxRotationY, m_MaxRotationZ);
-                    AwesomeExtensions.SetObjectScale(go.transform, m_RandomizeScale, m_MinSize, m_MaxSize);
+                    AwesomeExtensions.SetObjectRotation(go.transform, RandomizeRotation, MaxRotationX,
+                        MaxRotationY, MaxRotationZ);
+                    AwesomeExtensions.SetObjectScale(go.transform, RandomizeScale, MinSize, MaxSize);
                     go.layer = 0;
                 }
             }
@@ -784,20 +753,20 @@ namespace cBrush
 
         private static void StrokeDragDot()
         {
-            if (m_DragObject != null)
+            if (DragObject != null)
             {
-                m_DragObject.layer = 0;
-                m_DragObject = null;
+                DragObject.layer = 0;
+                DragObject = null;
                 return;
             }
 
-            if (m_DragObject == null)
+            if (DragObject == null)
             {
-                var go = Instantiate(m_GameObject, m_PainterPosition, Quaternion.identity);
+                var go = Instantiate(GameObject, PainterPosition, Quaternion.identity);
                 var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
                 tag.hideFlags = HideFlags.HideAndDontSave;
-                m_DragObject = go;
-                m_DragObject.layer = 2;
+                DragObject = go;
+                DragObject.layer = 2;
             }
 
         }
@@ -805,28 +774,27 @@ namespace cBrush
         private static void StrokeDots()
         {
             //clear out any drag paint object
-            if (m_DragObject != null)
+            if (DragObject != null)
             {
-                m_DragObject.layer = 0;
-                m_DragObject = null;
-                DestroyImmediate(m_DragObject);
+                DragObject.layer = 0;
+                DragObject = null;
+                DestroyImmediate(DragObject);
             }
 
-            if (m_GameObject != null)
+            if (GameObject != null)
             {
-                for (int i = 0; i < m_PaintIntensity; i++)
+                for (int i = 0; i < PaintIntensity; i++)
                 {
-                    var go = Instantiate(m_GameObject, m_PainterPosition, Quaternion.identity);
+                    var go = Instantiate(GameObject, PainterPosition, Quaternion.identity);
                     var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
                     tag.hideFlags = HideFlags.HideAndDontSave;
                     //void record session
                     //m_BigBrushSessionRecorder.SessionObjects.Add(go);
 
-                    if (m_UseNormalDirection)
-                        go.transform.rotation = Quaternion.FromToRotation(go.transform.up, m_NormalDirection) *
-                                                go.transform.rotation;
+                    if (UseNormalDirection)
+                        go.transform.rotation = Quaternion.FromToRotation(go.transform.up, NormalDirection) * go.transform.rotation;
 
-                    var randomradius = RandomCurve(m_Radius);
+                    var randomradius = RandomCurve(Radius);
                     //var x = RandomCurve(go.transform.position.x);
                     var y = go.transform.position.y;
                     //var z = RandomCurve(go.transform.position.z);
@@ -835,9 +803,9 @@ namespace cBrush
 
                     go.transform.position = pos;
 
-                    AwesomeExtensions.SetObjectRotation(go.transform, m_RandomizeRotation, m_MaxRotationX,
-                        m_MaxRotationY, m_MaxRotationZ);
-                    AwesomeExtensions.SetObjectScale(go.transform, m_RandomizeScale, m_MinSize, m_MaxSize);
+                    AwesomeExtensions.SetObjectRotation(go.transform, RandomizeRotation, MaxRotationX,
+                        MaxRotationY, MaxRotationZ);
+                    AwesomeExtensions.SetObjectScale(go.transform, RandomizeScale, MinSize, MaxSize);
                     go.layer = 0;
                 }
             }
@@ -861,67 +829,68 @@ namespace cBrush
 
         public static float RandomCurve(float num)
         {
-            return num * (float) m_CumulativeProbability.Evaluate(UnityEngine.Random.value);
+            return num * (float) CumulativeProbability.Evaluate(UnityEngine.Random.value);
         }
 
         public static void DrawBigBrushGizmo()
         {
-            if (m_PaintMode)
+            Debug.Log("Updatebrushtrue");
+            if (PaintMode)
             {
-
-                Handles.color = m_GizmoBrushColour;
+                Debug.Log("Painting");
+                Handles.color = GizmoBrushColour;
 
                 //Quaternion.LookRotation(new Vector3(0, 180, 1)) flat circle
-                var thicken1 = m_Radius * 1.005f;
-                var thicken2 = m_Radius * 1.01f;
-                var thicken3 = m_Radius * 1.02f;
-                var thicken4 = m_Radius * 1.03f;
-                var thicken11 = m_Radius * 1.005f;
-                var thicken21 = m_Radius * 1.015f;
-                var thicken31 = m_Radius * 1.025f;
-                var thicken41 = m_Radius * 1.035f;
+                var thicken1 = Radius * 1.005f;
+                var thicken2 = Radius * 1.01f;
+                var thicken3 = Radius * 1.02f;
+                var thicken4 = Radius * 1.03f;
+                var thicken11 = Radius * 1.005f;
+                var thicken21 = Radius * 1.015f;
+                var thicken31 = Radius * 1.025f;
+                var thicken41 = Radius * 1.035f;
 
-                if (m_NormalDirection == Vector3.zero)
-                    m_NormalDirection = Vector3.up;
+                if (NormalDirection == Vector3.zero)
+                    NormalDirection = Vector3.up;
 
                 //show a line thats always up
-                var lineEndUpPos = m_PainterPosition + Vector3.up;
-                Handles.DrawLine(m_PainterPosition, lineEndUpPos);
+                var lineEndUpPos = PainterPosition + Vector3.up;
+                Handles.DrawLine(PainterPosition, lineEndUpPos);
 
                 //show a line thats always reflects normal direction, to help gauge space
-                var lineEndPos = m_PainterPosition + m_RayCastHitInfo.normal;
-                Handles.DrawLine(m_PainterPosition, lineEndPos);
+                var lineEndPos = PainterPosition + RayCastHitInfo.normal;
+                Handles.DrawLine(PainterPosition, lineEndPos);
 
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), m_Radius,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), Radius,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), m_Radius,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), Radius,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), m_Radius,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), Radius,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken1,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken1,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken2,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken2,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken3,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken3,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken4,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken4,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken11,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken11,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken21,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken21,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken31,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken31,
                     EventType.Repaint);
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), thicken41,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), thicken41,
                     EventType.Repaint);
 
 
                 //Handles.DrawSolidArc(m_PainterPosition, Vector3.up, -Vector3.right, 180, 3);
 
-                Handles.color = m_GizmoBrushFocalColour;
+                Handles.color = GizmoBrushFocalColour;
                 var focalSize = 0.5f;
 
-                if (AwesomeExtensions.IsPositive(m_FocalShift))
+                if (AwesomeExtensions.IsPositive(FocalShift))
                 {
                     float OldMax = 1;
                     float OldMin = 0.1f;
@@ -929,13 +898,13 @@ namespace cBrush
                     float NewMin = 0.5f;
                     float OldRange = (OldMax - OldMin);
                     float NewRange = (NewMax - NewMin);
-                    float NewValue = (((m_FocalShift - OldMin) * NewRange) / OldRange) + NewMin;
+                    float NewValue = (((FocalShift - OldMin) * NewRange) / OldRange) + NewMin;
                     Debug.Log(NewValue);
 
                     focalSize = NewValue;
                 }
 
-                if (AwesomeExtensions.IsNegative(m_FocalShift))
+                if (AwesomeExtensions.IsNegative(FocalShift))
                 {
                     //float OldMax = 1; float OldMin = 0.1f; float NewMax = 0.5f; float NewMin = 0.01f;
                     float OldMax = 0;
@@ -944,7 +913,7 @@ namespace cBrush
                     float NewMin = 0f;
                     float OldRange = (OldMax - OldMin);
                     float NewRange = (NewMax - NewMin);
-                    float NewValue = (((m_FocalShift - OldMin) * NewRange) / OldRange) + NewMin;
+                    float NewValue = (((FocalShift - OldMin) * NewRange) / OldRange) + NewMin;
                     Debug.Log(NewValue);
                     //float remap = 0.5f - NewValue;
                     focalSize = NewValue;
@@ -953,13 +922,13 @@ namespace cBrush
 
 
 
-                focalSize = m_Radius * focalSize;
+                focalSize = Radius * focalSize;
                 //focalSize += m_FocalShift;
 
                 //  (m_Radius * 0.5f) * (m_FocalShift * 1);
                 //Debug.Log(focalSize);
 
-                Handles.CircleHandleCap(0, m_PainterPosition, Quaternion.LookRotation(m_NormalDirection), focalSize,
+                Handles.CircleHandleCap(0, PainterPosition, Quaternion.LookRotation(NormalDirection), focalSize,
                     EventType.Repaint);
             }
 
@@ -980,12 +949,12 @@ namespace cBrush
         {
             //GUI.skin.label.normal.textColor = Color.black;
             //Set up the box style
-            if (m_boxStyle == null)
+            if (m_BoxStyle == null)
             {
-                m_boxStyle = new GUIStyle(GUI.skin.box);
-                m_boxStyle.normal.textColor = GUI.skin.label.normal.textColor;
-                m_boxStyle.fontStyle = FontStyle.Bold;
-                m_boxStyle.alignment = TextAnchor.UpperLeft;
+                m_BoxStyle = new GUIStyle(GUI.skin.box);
+                m_BoxStyle.normal.textColor = GUI.skin.label.normal.textColor;
+                m_BoxStyle.fontStyle = FontStyle.Bold;
+                m_BoxStyle.alignment = TextAnchor.UpperLeft;
             }
 
             if (m_ContentStyle == null)
@@ -998,11 +967,11 @@ namespace cBrush
             }
 
             //Setup the wrap style
-            if (m_wrapStyle == null)
+            if (m_WrapStyle == null)
             {
-                m_wrapStyle = new GUIStyle(GUI.skin.label);
-                m_wrapStyle.fontStyle = FontStyle.Normal;
-                m_wrapStyle.wordWrap = true;
+                m_WrapStyle = new GUIStyle(GUI.skin.label);
+                m_WrapStyle.fontStyle = FontStyle.Normal;
+                m_WrapStyle.wordWrap = true;
             }
         }
 
@@ -1029,11 +998,11 @@ namespace cBrush
             }
 
             //Setup the wrap style
-            if (m_wrapStyle == null)
+            if (m_WrapStyle == null)
             {
-                m_wrapStyle = new GUIStyle(GUI.skin.label);
-                m_wrapStyle.fontStyle = FontStyle.Normal;
-                m_wrapStyle.wordWrap = true;
+                m_WrapStyle = new GUIStyle(GUI.skin.label);
+                m_WrapStyle.fontStyle = FontStyle.Normal;
+                m_WrapStyle.wordWrap = true;
             }
         }
 
@@ -1060,11 +1029,11 @@ namespace cBrush
             }
 
             //Setup the wrap style
-            if (m_wrapStyle == null)
+            if (m_WrapStyle == null)
             {
-                m_wrapStyle = new GUIStyle(GUI.skin.label);
-                m_wrapStyle.fontStyle = FontStyle.Normal;
-                m_wrapStyle.wordWrap = true;
+                m_WrapStyle = new GUIStyle(GUI.skin.label);
+                m_WrapStyle.fontStyle = FontStyle.Normal;
+                m_WrapStyle.wordWrap = true;
             }
         }
     }

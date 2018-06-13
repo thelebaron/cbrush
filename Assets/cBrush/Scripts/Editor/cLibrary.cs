@@ -98,7 +98,7 @@ namespace cBrush
 
                     if (GUILayout.Button(assetIcon, GUILayout.MaxWidth(m_ThumbSize), GUILayout.MaxHeight(m_ThumbSize)))
                     {
-                        cBrushEditor.m_GameObject = m_LibraryGroup.m_ItemList[i];
+                        CBrushEditor.GameObject = m_LibraryGroup.m_ItemList[i];
                     }
 
                 }

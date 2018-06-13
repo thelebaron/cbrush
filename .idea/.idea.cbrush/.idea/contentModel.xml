@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\thele\.Rider2018.1\system\resharper-host\Local\Transient\ReSharperHost\v12\SolutionCaches\_cbrush.-84709882.00" t="ExcludeRecursive" />
+    <e p="C:\Users\thele\Documents\GitHub\cbrush" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="cbrush" t="Include">
+          <e p="Scripts" t="Include">
+            <e p="Editor" t="Include">
+              <e p="cBrushDataObjects.cs" t="Include" />
+              <e p="cBrushEditor.cs" t="Include" />
+              <e p="cGridUtility.cs" t="Include" />
+              <e p="cLibrary.cs" t="Include" />
+              <e p="cLibraryGroup.cs" t="Include" />
+              <e p="cLibraryGroupEditor.cs" t="Include" />
+              <e p="cSceneManagement.cs" t="Include" />
+              <e p="cThumbnailer.cs" t="Include" />
+              <e p="ScriptableObjectUtility.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="cObjectEditor.cs" t="Include" />
+        <e p="DEBUG_archhits.cs" t="Include" />
+        <e p="FlyCamera.cs" t="Include" />
+        <e p="GameObjectEditorWindow.cs" t="Include" />
+        <e p="gui.cs" t="Include" />
+        <e p="MeshInstances.cs" t="Include" />
+        <e p="PreviewUtil.cs" t="Include" />
+        <e p="Scripts" t="Include">
+          <e p="BigBrushSessionRecorder.cs" t="Include" />
+          <e p="BigBrushSettings.cs" t="Include" />
+          <e p="BigBrushTag.cs" t="Include" />
+          <e p="Block.cs" t="Include" />
+          <e p="BlockResource.cs" t="Include" />
+          <e p="BugPointer.cs" t="Include" />
+          <e p="Building.cs" t="Include" />
+          <e p="BuildingFloor.cs" t="Include" />
+          <e p="BuildingResource.cs" t="Include" />
+          <e p="BuildingWall.cs" t="Include" />
+          <e p="Concepter" t="Include">
+            <e p="Concepter.cs" t="Include" />
+          </e>
+          <e p="CustomSceneMouseMoverUI.cs" t="Include" />
+          <e p="Editor" t="Include">
+            <e p="BuildingInspector.cs" t="Include" />
+            <e p="CustomSceneMouseMoverUIInspector.cs" t="Include" />
+            <e p="FloorInspector.cs" t="Include" />
+            <e p="GridInspector.cs" t="Include" />
+            <e p="NewWallInspector.cs" t="Include" />
+            <e p="ObjSprayInspector.cs" t="Include" />
+            <e p="PhysicsSimulationEditor.cs" t="Include" />
+            <e p="WallInspector.cs" t="Include" />
+          </e>
+          <e p="EditorUtilityX.cs" t="Include" />
+          <e p="Extensions" t="Include">
+            <e p="Extensions.cs" t="Include" />
+          </e>
+          <e p="Grid.cs" t="Include" />
+          <e p="InstancedIndirectRenderer.cs" t="Include" />
+          <e p="Instancer.cs" t="Include" />
+          <e p="KeepOnLoad.cs" t="Include" />
+          <e p="ObjDrawText.cs" t="Include" />
+          <e p="ObjectPainter.cs" t="Include" />
+          <e p="ObjSpray.cs" t="Include" />
+          <e p="OldWall.cs" t="Include" />
+          <e p="PhysicsSimulation.cs" t="Include" />
+          <e p="ProbabilityModifier.cs" t="Include" />
+          <e p="SceneGUI.cs" t="Include" />
+          <e p="Shared" t="Include">
+            <e p="Editor" t="Include">
+              <e p="LargeHeaderDrawer.cs" t="Include" />
+            </e>
+            <e p="LargeHeader.cs" t="Include" />
+          </e>
+          <e p="Structura" t="Include">
+            <e p="Cell.cs" t="Include" />
+            <e p="Editor" t="Include">
+              <e p="StrucFloorInspector.cs" t="Include" />
+              <e p="StrucSubWallInspector.cs" t="Include" />
+              <e p="StructuraCoreInspector.cs" t="Include" />
+              <e p="StrucWallInspector.cs" t="Include" />
+            </e>
+            <e p="Floor.cs" t="Include" />
+            <e p="Point.cs" t="Include" />
+            <e p="StructuraCore.cs" t="Include" />
+            <e p="SubWall.cs" t="Include" />
+            <e p="Wall.cs" t="Include" />
+          </e>
+          <e p="TempEditorGravity.cs" t="Include" />
+          <e p="Utils" t="Include">
+            <e p="AwesomeExtensions.cs" t="Include" />
+            <e p="CustomPostprocessor.cs" t="Include" />
+            <e p="FreeCamera.cs" t="Include" />
+            <e p="NewTransformInspector.cs" t="Include" />
+            <e p="PositionRecorder.cs" t="Include" />
+            <e p="TransformDeepChildExtension.cs" t="Include" />
+            <e p="TransformSceneHelper.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Shaders" t="Include">
+          <e p="StandardCullOff.shader" t="Include" />
+          <e p="StandardSpecularCullOff.shader" t="Include" />
+          <e p="TestInstancer.shader" t="Include" />
+        </e>
+      </e>
+      <e p="cbrush.sln" t="IncludeFlat" />
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>
