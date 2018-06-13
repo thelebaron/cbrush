@@ -193,7 +193,12 @@ namespace cBrush
 
             GUILayout.EndHorizontal();
 
-            /// Row
+            //
+            //
+            /***
+             *  New Row
+             */
+            // Row
             GUILayout.BeginHorizontal("", GUIStyle.none);
             GameObject = (GameObject) EditorGUILayout.ObjectField("", GameObject, typeof(GameObject), true,
                 GUILayout.MaxWidth(90));
@@ -291,12 +296,14 @@ namespace cBrush
         private void OnInspectorUpdate()
         {
                     //Debug.Log("OnInspectorUpdate");
+            /*
                     UpdateBrushMode();
                     UpdateBrushNormal();
                     UpdateBrushRandomizePosition();
                     UpdateBrushRandomizeRotation();
                     UpdateBrushRandomizeScale();
                     UpdateBrushStroke();
+                    */
         }
 
 
@@ -464,6 +471,8 @@ namespace cBrush
                             typeof(Texture2D));
                     PaintMode = false;
                     MyStatus = "Select";
+                    DragObject = null;
+                    GameObject = null;
                     break;
                 }
                 case 1:
@@ -513,7 +522,6 @@ namespace cBrush
             Handles.BeginGUI();
 
             Handles.EndGUI();
-            Debug.Log("OnScene");
 
             //Draws the brush circle
             DrawBigBrushGizmo();
@@ -834,10 +842,8 @@ namespace cBrush
 
         public static void DrawBigBrushGizmo()
         {
-            Debug.Log("Updatebrushtrue");
             if (PaintMode)
             {
-                Debug.Log("Painting");
                 Handles.color = GizmoBrushColour;
 
                 //Quaternion.LookRotation(new Vector3(0, 180, 1)) flat circle
