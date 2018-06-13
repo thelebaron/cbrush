@@ -11,12 +11,12 @@
             <e p="Editor" t="Include">
               <e p="cBrushDataObjects.cs" t="Include" />
               <e p="cBrushEditor.cs" t="Include" />
-              <e p="cGridUtility.cs" t="Include" />
               <e p="cLibrary.cs" t="Include" />
               <e p="cLibraryGroup.cs" t="Include" />
               <e p="cLibraryGroupEditor.cs" t="Include" />
               <e p="cSceneManagement.cs" t="Include" />
               <e p="cThumbnailer.cs" t="Include" />
+              <e p="CUtility.cs" t="Include" />
               <e p="ScriptableObjectUtility.cs" t="Include" />
             </e>
           </e>

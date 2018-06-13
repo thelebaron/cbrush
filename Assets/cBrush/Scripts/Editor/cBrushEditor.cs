@@ -48,6 +48,8 @@ namespace cBrush
         public static float MaxRotationX;
         public static float MaxRotationY;
         public static float MaxRotationZ;
+        public static bool ToggleShadows;
+        public static bool ToggleLighting;
         public static AnimationCurve CumulativeProbability;
 
         private GUIStyle m_BoxStyle;
@@ -89,6 +91,10 @@ namespace cBrush
         public static Texture2D ButtonIconRandomizeRotation;
         public static Texture2D ButtonIconRandomizeScale;
         public static Texture2D ButtonIconGrid;
+        public static Texture2D ButtonIconShadow;
+        public static Texture2D ButtonIconLight;
+        public static Texture2D ButtonIconLightBake;
+        public static Texture2D ButtonIconLightClear;
 
         //stroke vars
         public static bool m_StrokeDragDot;
@@ -155,16 +161,61 @@ namespace cBrush
 
             if (GUI.Button(new Rect(190, 10, 25, 25), ButtonIconGrid, GUIStyle.none))
             {
-                cGridUtility.ShowGrid = !cGridUtility.ShowGrid;
+                CUtility.ShowGrid = !CUtility.ShowGrid;
                 UpdateGrid();
             }
+            if (GUI.Button(new Rect(220, 10, 25, 25), ButtonIconShadow, GUIStyle.none))
+            {
+                ToggleShadows = !ToggleShadows;
+                UpdateShadow();
+            }
+            if (GUI.Button(new Rect(245, 10, 25, 25), ButtonIconLight, GUIStyle.none))
+            {
+                ToggleLighting = !ToggleLighting;
 
+                
+                UpdateLighting();
+            }
+            /*
+            if (GUI.Button(new Rect(270, 10, 25, 25), ButtonIconLightBake, GUIStyle.none))
+            {
+                Lightmapping.Bake();
+                //ToggleLighting = !ToggleLighting;
+                //UpdateLighting();
+            }
+            if (GUI.Button(new Rect(300, 10, 25, 25), ButtonIconLightClear, GUIStyle.none))
+            {
+                Lightmapping.Clear();
+                //ToggleLighting = !ToggleLighting;
+                //UpdateLighting();
+            }*/
+            
 
             GUILayout.Space(125);
             GUILayout.Space(125);
             GUILayout.Space(125);
             GUILayout.Space(125);
-
+            if (GUILayout.Button("BakeLight"))
+            {
+                Lightmapping.Bake();
+            }
+            if (GUILayout.Button("Stop"))
+            {
+                Lightmapping.ForceStop();
+            }            
+            if (GUILayout.Button("Clear"))
+            {
+                Lightmapping.Clear();
+            }
+            if (GUILayout.Button("BakeOcclusion"))
+            {
+                StaticOcclusionCulling.Compute();
+            }
+            if (GUILayout.Button("BakeAstar"))
+            {
+                //StaticOcclusionCulling.Compute();
+            }
+            /*
             if (GUILayout.Button("SNewScene"))
             {
                 cSceneManagement.NewScene();
@@ -174,7 +225,9 @@ namespace cBrush
             {
                 cSceneManagement.ReloadWorkingScene();
             }
-
+            
+            
+            
             GUILayout.Label("MultiObject:", GUILayout.MaxWidth(50));
             GameObject = (GameObject) EditorGUILayout.ObjectField("", GameObject, typeof(GameObject), true,
                 GUILayout.MaxWidth(90));
@@ -185,19 +238,19 @@ namespace cBrush
                 //AssetDatabase.Refresh();
                 //SaveSettings();
             }
-
+            
             if (GUILayout.Button("LoadSettings(N)")) //not yet working
             {
                 LoadSettings();
             }
-
+            */
             GUILayout.EndHorizontal();
 
             //
             //
-            /***
-             *  New Row
-             */
+            /******************************************************************************************
+             *  New RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew RowNew Row
+             *******************************************************************************************/
             // Row
             GUILayout.BeginHorizontal("", GUIStyle.none);
             GameObject = (GameObject) EditorGUILayout.ObjectField("", GameObject, typeof(GameObject), true,
@@ -259,8 +312,7 @@ namespace cBrush
                 GizmoBrushColour = Color.green;
                 GizmoBrushFocalColour = Color.blue;
                 CumulativeProbability = AnimationCurve.Linear(0, 0, 10, 10);
-                bool init = false;
-    
+                
                 MyStatus = "Welcome!";
 
                 UpdateBrushMode();
@@ -270,6 +322,8 @@ namespace cBrush
                 UpdateBrushRandomizeScale();
                 UpdateBrushStroke();
                 UpdateGrid();
+                UpdateShadow();
+                UpdateLighting();
 
             }
         }
@@ -306,19 +360,87 @@ namespace cBrush
                     */
         }
 
+        private void UpdateLighting()
+        {
 
+            //ButtonIconLightBake =(Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_lightBake.png",
+               // typeof(Texture2D));
+            //ButtonIconLightClear =(Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_lightClear.png",
+                //typeof(Texture2D));
+            
+
+        
+            if (ToggleLighting)
+            {     
+                ButtonIconLight =(Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_lightOn.png",
+                    typeof(Texture2D));
+                SceneView.lastActiveSceneView.m_SceneLighting = true;
+                SceneView.lastActiveSceneView.Repaint ();
+                Event.current.Use ();
+                /*
+                Light[] allLights = FindObjectsOfType<Light>();
+                foreach (var light in allLights)
+                {
+                    light.enabled = !light.enabled;
+                }*/
+            }
+            else
+            {       
+                ButtonIconLight =(Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_lightOff.png",
+                    typeof(Texture2D));
+                SceneView.lastActiveSceneView.m_SceneLighting = false;
+                SceneView.lastActiveSceneView.Repaint ();
+                Event.current.Use ();
+                /*
+                Light[] allLights = FindObjectsOfType<Light>();
+                foreach (var light in allLights)
+                {
+                    light.enabled = !light.enabled;
+                }
+                */
+            }
+
+            OnInspectorUpdate();
+        }
+        
+        private void UpdateShadow()
+        {
+
+            if (ToggleShadows)
+            {
+                QualitySettings.shadows = ShadowQuality.All;
+                ButtonIconShadow =
+                    (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_shadowOn.png",
+                        typeof(Texture2D));
+                MyStatus = "Shadows on";
+            }
+            else
+            {
+                QualitySettings.shadows = ShadowQuality.Disable;
+                ButtonIconShadow =
+                    (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_shadowOff.png",
+                        typeof(Texture2D));
+                MyStatus = "Shadows off";
+            }
+
+            OnInspectorUpdate();
+        }
+        
         private void UpdateGrid()
         {
 
-            if (cGridUtility.ShowGrid)
+            if (CUtility.ShowGrid)
             {
+                
+
                 ButtonIconGrid =
                     (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_grid_on.png",
                         typeof(Texture2D));
                 MyStatus = "Grid on";
             }
             else
-            {
+            {               
+                
                 ButtonIconGrid =
                     (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_grid_off.png",
                         typeof(Texture2D));
