@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33704332733513106}
   - component: {fileID: 136111792339934206}
   - component: {fileID: 23874544668254388}
+  - component: {fileID: 114173593991158082}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -51,9 +52,11 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: af2ff39ebf69a604d844a003fdb440ef, type: 2}
   m_StaticBatchInfo:
@@ -66,6 +69,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -81,6 +85,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1810497514772414}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114173593991158082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1810497514772414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ffead29dcc697c4d8903950b4e4a934, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StoredPosition: {x: 0, y: 1.94, z: 8.5}
+  LockEnabled: 0
 --- !u!136 &136111792339934206
 CapsuleCollider:
   m_ObjectHideFlags: 1
