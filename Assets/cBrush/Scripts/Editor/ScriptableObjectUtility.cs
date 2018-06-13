@@ -49,11 +49,11 @@ public static class ScriptableObjectUtility
     [MenuItem("BigBrush/Create Session")]
     public static void CreateBigBrush()
     {
-        ScriptableObjectUtility.CreateAssetPath<BigBrushSessionRecorder>("Assets/Resources/");
+        //ScriptableObjectUtility.CreateAssetPath<BigBrushSessionRecorder>("Assets/Resources/");
     }
     [MenuItem("BigBrush/Settings")]
     public static void CreateBigBrushSettings()
     {
-        ScriptableObjectUtility.CreateAssetPath<BigBrushSettings>("Assets/Resources/");
+        //ScriptableObjectUtility.CreateAssetPath<BigBrushSettings>("Assets/Resources/");
     }
 }

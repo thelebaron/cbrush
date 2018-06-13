@@ -22,8 +22,7 @@ namespace cBrush
         public static Color GizmoBrushFocalColour;
         float m_SizeMultiplier = 1.0f;
         public static float Radius;
-        public static int Intensity = 25;
-        public static float FocalShift = 0;
+        public static float FocalShift;
 
 
         public static int PaintIntensity;
@@ -67,7 +66,7 @@ namespace cBrush
             DragDot = 2,
             DragRect = 3,
             Freehand = 4
-        };
+        }
 
         public static StrokeOptions m_StrokeOptions;
 
@@ -75,7 +74,7 @@ namespace cBrush
         {
             All,
             Selected
-        };
+        }
 
         public static PaintSurfaceType m_PaintSurface;
 
@@ -374,9 +373,14 @@ namespace cBrush
             {     
                 ButtonIconLight =(Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_lightOn.png",
                     typeof(Texture2D));
-                SceneView.lastActiveSceneView.m_SceneLighting = true;
-                SceneView.lastActiveSceneView.Repaint ();
-                Event.current.Use ();
+
+                if (SceneView.lastActiveSceneView != null)
+                {
+                    SceneView.lastActiveSceneView.m_SceneLighting = true;
+                    SceneView.lastActiveSceneView.Repaint ();
+                    Event.current.Use ();
+                }
+
                 /*
                 Light[] allLights = FindObjectsOfType<Light>();
                 foreach (var light in allLights)
@@ -388,9 +392,13 @@ namespace cBrush
             {       
                 ButtonIconLight =(Texture2D) AssetDatabase.LoadAssetAtPath("Assets/cBrush/Resources/Icons/cbrush_ico_lightOff.png",
                     typeof(Texture2D));
-                SceneView.lastActiveSceneView.m_SceneLighting = false;
-                SceneView.lastActiveSceneView.Repaint ();
-                Event.current.Use ();
+                if (SceneView.lastActiveSceneView != null)
+                {
+                    SceneView.lastActiveSceneView.m_SceneLighting = false;
+                    SceneView.lastActiveSceneView.Repaint();
+                    Event.current.Use();
+                }
+
                 /*
                 Light[] allLights = FindObjectsOfType<Light>();
                 foreach (var light in allLights)
@@ -648,12 +656,10 @@ namespace cBrush
             //Draws the brush circle
             DrawBigBrushGizmo();
 
-            if (Event.current.alt == true)
+            if (Event.current.alt)
             {
-
                 MyStatus = "Alt";
                 return;
-
             }
 
             Event e = Event.current;
@@ -849,8 +855,8 @@ namespace cBrush
                 for (int i = 0; i < PaintIntensity; i++)
                 {
                     var go = Instantiate(GameObject, PainterPosition, Quaternion.identity);
-                    var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
-                    tag.hideFlags = HideFlags.HideAndDontSave;
+                    //var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
+                    //tag.hideFlags = HideFlags.HideAndDontSave;
                     //void record session
                     //m_BigBrushSessionRecorder.SessionObjects.Add(go);
 
@@ -893,8 +899,8 @@ namespace cBrush
             if (DragObject == null)
             {
                 var go = Instantiate(GameObject, PainterPosition, Quaternion.identity);
-                var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
-                tag.hideFlags = HideFlags.HideAndDontSave;
+                //var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
+                //tag.hideFlags = HideFlags.HideAndDontSave;
                 DragObject = go;
                 DragObject.layer = 2;
             }
@@ -916,8 +922,8 @@ namespace cBrush
                 for (int i = 0; i < PaintIntensity; i++)
                 {
                     var go = Instantiate(GameObject, PainterPosition, Quaternion.identity);
-                    var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
-                    tag.hideFlags = HideFlags.HideAndDontSave;
+                    //var tag = go.AddComponent<BigBrushTag>() as BigBrushTag;
+                    //tag.hideFlags = HideFlags.HideAndDontSave;
                     //void record session
                     //m_BigBrushSessionRecorder.SessionObjects.Add(go);
 
